@@ -4,7 +4,7 @@ const ShowSchema = new mongoose.Schema({
 
     show_id: {type: Number},
     name: {type: String},
-    rating: {type: Number, default: 0},
+    rating: {type: Number, default: 1},
     notes: {type: String, default: ''},
     status: {type: String, default: 'Watching'},
     episodes_watched: {type: Number, default: 0},

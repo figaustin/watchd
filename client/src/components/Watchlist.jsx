@@ -13,6 +13,7 @@ import { FormControl } from '@mui/material';
 import { InputLabel } from '@mui/material';
 import { Select } from '@mui/material';
 import { MenuItem } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 
 const Watchlist = () => {
@@ -26,6 +27,10 @@ const Watchlist = () => {
     let [completedShows, setCompletedShows] = useState([]);
     let [planShow, setPlanShows] = useState([]);
     let [edit, setEdit] = useState({})
+
+    let [status, setStatus] = useState('Watching')
+    let [rating, setRating] = useState(10);
+    let [notes, setNotes] = useState('');
 
 
     useEffect(() => {
@@ -82,10 +87,13 @@ const Watchlist = () => {
         setEdit({});
     };
 
+    const submitHandler = () => {
+        axios.put(``)
+    }
 
     return (
         <Container sx={{ mt: 3 }}>
-            <Typography variant='h6' align='left'>Watching</Typography>
+            <Typography variant='h6' align='left' sx={{color: 'white'}}>Watching</Typography>
             <TableContainer sx={{ border: "1px solid white" }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -116,19 +124,50 @@ const Watchlist = () => {
                 <DialogTitle>Edit Show</DialogTitle>
                 <DialogContent>
                     <Typography>Title: {edit.name}</Typography>
-                    <Box component="form" noValidate sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 2}}>
-                        <Typography>Status</Typography>
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                            >
-                                <MenuItem value='Watching'>Watching</MenuItem>
-                                <MenuItem value='Completed'>Completed</MenuItem>
-                                <MenuItem value='Plan'>Plan To Watch</MenuItem>
-                            </Select>
-                        </FormControl>
+                    <Box component="form" noValidate sx={{ mt: 5}}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Typography>Status</Typography>
+                                <FormControl fullWidth>
+                                    
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={edit.status}
+                                    >
+                                        <MenuItem value='Watching'>Watching</MenuItem>
+                                        <MenuItem value='Completed'>Completed</MenuItem>
+                                        <MenuItem value='Plan'>Plan To Watch</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography>Rating</Typography>
+                                    <FormControl fullWidth>
+                                        
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={edit.rating}
+                                        >
+                                            <MenuItem value={10}>10 (Masterpiece) </MenuItem>
+                                            <MenuItem value={9}>9 (Amazing)</MenuItem>
+                                            <MenuItem value={8}>8 (Great)</MenuItem>
+                                            <MenuItem value={8}>7 (Very Good)</MenuItem>
+                                            <MenuItem value={8}>6 (Good)</MenuItem>
+                                            <MenuItem value={8}>5 (Average)</MenuItem>
+                                            <MenuItem value={8}>4 (Not so good)</MenuItem>
+                                            <MenuItem value={8}>3 (Bad)</MenuItem>
+                                            <MenuItem value={8}>2 (Very Bad)</MenuItem>
+                                            <MenuItem value={8}>1 (Horrendous)</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography>Notes</Typography>
+                                <TextField fullWidth multiline id='notes' value={edit.notes}/>
+                            </Grid>
+                        </Grid>
                     </Box>
                 </DialogContent>
                 <DialogActions>

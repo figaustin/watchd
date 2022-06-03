@@ -17,6 +17,7 @@ import Watchlist from './components/Watchlist';
 
 const theme = createTheme({
   palette: {
+    
     primary: {
       main: '#172A3A',
     },
