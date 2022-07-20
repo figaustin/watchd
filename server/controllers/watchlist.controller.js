@@ -22,6 +22,18 @@ module.exports.addShowToWatchlist = (req, res) => {
         status : req.body.status,
     }}}, {new: true})
         .then(updatedList => res.json({watchlist: updatedList}))
-        .catch(err => res.json({message: "Something went wrong", error: err}))      
+        .catch(err => res.json({message: "Something went wrong", error: err})) 
 };
+
+module.exports.updateShowInWatchlist = (req, res) => {
+    Watchlist.findOneAndUpdate({_id: req.params.id}, req.body, { new: true})
+        .then(updatedShow => ({show: updatedShow}))
+        .catch(err => res.json({message: "Something went wrong!", error: err}))
+}
+
+module.exports.removeShowFromWatchlist = (req, res) => {
+    Watchlist.findByIdAndDelete({_id: req.params.id})
+        .then(result = res.json({result: result}))
+        .catch(err => res.json({message: "Something went wrong", error: err}))
+}
 

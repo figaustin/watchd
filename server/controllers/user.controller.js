@@ -52,7 +52,7 @@ class UserController {
 
         const userToken = jwt.sign({
             id: user._id,
-            username : user.username
+            userName : user.userName
         }, process.env.SECRET_KEY);
 
         res.cookie('usertoken', userToken, process.env.SECRET_KEY, {httpOnly: true})
@@ -75,7 +75,11 @@ class UserController {
 
     }
 
-    
+    findById = (req, res) => {
+        User.findById({_id : req.body._id})
+        .then(user => {res.json({user: user})})
+        .catch(err => {res.json(err)})
+    }
 
 }
 

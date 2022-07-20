@@ -1,25 +1,12 @@
-import { TextField } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import { Button } from '@mui/material';
-import axios from 'axios';
-import { useHistory } from 'react-router-dom';
-
-
 
 const Home = () => {
-    
-    let history = useHistory();
-    const[search, setSearch] = useState("");
 
-    const doSearch = () => {
-        history.push(`/show/${search}`)
-           
-    }
+    let [user, setUser] = useState(null);
 
-    return (
+    return(
         <>
-            <TextField variant='filled' onChange={(e) => setSearch(e.target.value)}/>
-            <Button variant='contained' onClick={doSearch}>Search</Button>
+            <p className='text-3xl mt-24'>Work in progress, please register for an account or press login and use the demo account provided OR search for some shows!</p>
         </>
     )
 }

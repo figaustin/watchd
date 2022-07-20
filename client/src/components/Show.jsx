@@ -1,95 +1,68 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Button, Paper, styled, Typography } from '@mui/material';
-import { Container } from '@mui/material';
-import { Stack } from '@mui/material';
-import { theme } from '../App';
 
 const Show = () => {
-
-    
-
-    const search = useParams();
-
-    const [results, setResults] = useState([]);
-
-    let [shows, setShows] = useState([]);
-
-
+    let [user, setUser] = useState(null);
+    const { id } = useParams();
+    const [show, setShow] = useState({});
+    const history = useHistory()
     useEffect(() => {
-        axios.get(`https://api.themoviedb.org/3/search/tv?api_key=${process.env.REACT_APP_MOVIEDB_KEY}&query=${search.search}`)
+
+        axios.get("http://localhost:8000/api/users/getloggedinuser", { withCredentials: true })
             .then(res => {
-                console.log(res)
-                // setResults(res.data.results)
-                for(let i = 0; i < res.data.results.length; i++) {
-                    axios.get(`https://api.themoviedb.org/3/tv/${res.data.results[i].id}?api_key=${process.env.REACT_APP_MOVIEDB_KEY}`)
-                        .then(res => {
-                            setResults(...results, res.data.results[i])
-                        })
+                console.log("res when getting logged in user", res)
+                if (res.data.results) {
+                    setUser(res.data.results)
                 }
             })
-            .catch(err => {console.log(err)})
-    },[])
-    let history = useHistory();
-    let [loggedInUser, setLoggedInUser] = useState(null);
+            .catch(err => {
+                console.log("err when getting logged in user", err)
+            })
 
+    }, [])
+    useEffect(() => {
+        axios.get(`https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.REACT_APP_MOVIEDB_KEY}`)
+            .then(res => {
+                console.log(res)
+                setShow(res.data)
+            })
+    }, [id])
 
-       useEffect(() => {
-
-           axios.get("http://localhost:8000/api/users/getloggedinuser", {withCredentials:true})
-               .then(res=>{
-                   console.log("res when getting logged in user", res)
-                   if(res.data.results){
-                       setLoggedInUser(res.data.results)
-                   }
-               })
-               .catch(err=>{
-                   console.log("err when getting logged in user", err)
-                   history.push("/")
-       
-               })
-           
-       }, [])
-
-    const Item = styled(Paper)(({theme}) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    }));
-
-    const addToWatchlist = (e, showId, showName, showEpisodes) => {
-        let showInfo = {showId, showName}
-        axios.put(`http://localhost:8000/api/users/${loggedInUser._id}/watchlist/addshow`, {show_id: showId, name: showName, total_episodes: showEpisodes})
+    const addToWatchlist = (showId, showName, showEpisodes) => {
+        
+        axios.put(`http://localhost:8000/api/users/${user._id}/watchlist/addshow`, { show_id: showId, name: showName, total_episodes: showEpisodes })
             .then(res => {
                 console.log("response after adding show", res)
-                console.log(showEpisodes)
+                history.push(`/watchlist/${user._id}`)
             })
             .catch(err => console.log("ERROR!!!", err))
     }
-    
-    return(
-            <Container sx={{mt:3}}>
-                <Stack spacing={2}>
-                {
-                    results.map((show, idx) => {
 
-                        return(
-                            
-                                <Item key={idx} sx={{border: "solid white", borderWidth: 'thin', backgroundColor: '#191919'}}>
-                                    <Typography>{show.name}</Typography>
-                                    <Typography>{show.popularity}</Typography>
-                                    <Button variant='outlined' onClick={(e) => addToWatchlist(e, show.id, show.name, show.number_of_episodes)}> Add to watchlist </Button>
-                                </Item>
-                            
-                        )
-                    })
-                }
-                </Stack>
+    return (
+        <div style={{backgroundImage: `url('https://image.tmdb.org/t/p/w500/${show.backdrop_path}')`, backgroundRepeat: "no-repeat", backgroundSize: "100%"}} className="flex w-full mt-16 border-t-2 border-b-2 border-black">
 
-            </Container>
+            <div className='flex h-1/5 bg-gradient-to-r from-slate-800 to-transparent'>
+                <div className='ml-56 flex text-white font-semibold'>
+                    <img src={`https://image.tmdb.org/t/p/w500/${show.poster_path}`}/>
+                    <div className='flex-col ml-20'>
+                        <p className='text-4xl ml-12 mt-24 mb-8 text-left'>{show.name}</p>
+                        <div className='w-96'>
+                            <p className='text-2xl text-left mb-2'>Overview</p>
+                            <p className='text-md text-left'>{show.overview}</p>
+                        </div>
+                        {
+                            user != null ?
+                                <div className='mt-48 text-2xl'>
+                                    <button onClick={(e) => addToWatchlist(show.id, show.name, show.number_of_episodes)}>Add to watchlist + </button>
+                                </div>
+                                : ""
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
     )
 }
 
