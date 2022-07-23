@@ -44,7 +44,7 @@ const SearchResults = () => {
     }
     const addToWatchlist = (showId, showName, showEpisodes) => {
         
-        axios.put(`http://localhost:8000/api/users/${loggedInUser._id}/watchlist/addshow`, { show_id: showId, name: showName, total_episodes: showEpisodes })
+        axios.post(`http://localhost:8000/api/watchlist/show/create`, { user_id: loggedInUser._id, show_id: showId, name: showName, episodes_watched: 0, total_episodes: showEpisodes })
             .then(res => {
                 console.log("response after adding show", res)
                 console.log(showEpisodes)

@@ -7,6 +7,7 @@ import Watchlist from './components/Watchlist';
 import Show from './components/Show';
 import Home from './components/Home';
 import Register from './components/Register';
+import EditShow from './components/EditShow';
 
 function App() {
 
@@ -36,6 +37,10 @@ function App() {
           <Route exact path="/show/:id">
             <NavBar/>
             <Show/>
+          </Route>
+          <Route exact path="/edit/:_id">
+            <NavBar/>
+            <EditShow/>
           </Route>
         </Switch>
       </BrowserRouter>

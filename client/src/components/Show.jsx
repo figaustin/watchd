@@ -31,7 +31,7 @@ const Show = () => {
 
     const addToWatchlist = (showId, showName, showEpisodes) => {
         
-        axios.put(`http://localhost:8000/api/users/${user._id}/watchlist/addshow`, { show_id: showId, name: showName, total_episodes: showEpisodes })
+        axios.post(`http://localhost:8000/api/watchlist/show/create`, { user_id: user._id, show_id: showId, name: showName, total_episodes: showEpisodes })
             .then(res => {
                 console.log("response after adding show", res)
                 history.push(`/watchlist/${user._id}`)
@@ -44,7 +44,7 @@ const Show = () => {
 
             <div className='flex h-1/5 bg-gradient-to-r from-slate-800 to-transparent'>
                 <div className='ml-56 flex text-white font-semibold'>
-                    <img src={`https://image.tmdb.org/t/p/w500/${show.poster_path}`}/>
+                    <img src={`https://image.tmdb.org/t/p/w500/${show.poster_path}`} className=""/>
                     <div className='flex-col ml-20'>
                         <p className='text-4xl ml-12 mt-24 mb-8 text-left'>{show.name}</p>
                         <div className='w-96'>

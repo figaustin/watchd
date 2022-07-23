@@ -18,4 +18,7 @@ AllMyUserRoutes(app);
 const AllMyWatchlistRoutes = require("./server/routes/watchlist.routes");
 AllMyWatchlistRoutes(app);
 
+const AllMyShowRoutes = require("./server/routes/show.routes");
+AllMyShowRoutes(app);
+
 app.listen(port, () => console.log(`Listening on port: ${port}`) );
